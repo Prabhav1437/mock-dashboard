@@ -1,10 +1,46 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-
+import plotly.express as px
 
 st.set_page_config(page_title="🔭 Multi-Messenger Event Correlator", layout="wide")
 
+st.markdown(
+    """
+    <style>
+    /* Gradient cosmic background */
+    .stApp {
+        background: radial-gradient(circle at 30% 30%, #1a1a40, #000000 80%);
+        color: #c77dff;
+    }
+
+    section[data-testid="stSidebar"] {
+        background-color: #1b1b2f;
+        color: #80ffdb;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: #80ffdb !important; /* Cyan glow */
+        text-shadow: 0px 0px 12px #80ffdb;
+    }
+
+    .stMarkdown, .stCaption, p {
+        color: #c77dff !important; /* Purple text */
+    }
+
+    div[data-testid="stMetricValue"] {
+        color: #ffba08 !important; /* Gold */
+        text-shadow: 0px 0px 10px #ffba08;
+    }
+
+    .stDataFrame {
+        background-color: #111111;
+        color: #80ffdb;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 st.title("🔭 Multi-Messenger Event Correlator")
 st.caption("Prototype dashboard for correlating astrophysical events across multiple observatories 🚀")
@@ -42,11 +78,40 @@ st.subheader("📈 Event Insights")
 col4, col5 = st.columns(2)
 
 with col4:
-    st.bar_chart(data["Event Type"].value_counts())
+    type_counts = data["Event Type"].value_counts().reset_index()
+    type_counts.columns = ["Event Type", "Count"]
+    fig1 = px.area(
+        type_counts,
+        x="Event Type", y="Count",
+        title="Event Types Over Observations"
+    )
+    fig1.update_traces(line_color="#80ffdb", fill="tozeroy", line_shape="spline")
+    fig1.update_layout(
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#c77dff"),
+        title_font=dict(color="#80ffdb")
+    )
+    st.plotly_chart(fig1, use_container_width=True)
 
 with col5:
-    st.bar_chart(data["Status"].value_counts())
+    status_counts = data["Status"].value_counts().reset_index()
+    status_counts.columns = ["Status", "Count"]
+    fig2 = px.area(
+        status_counts,
+        x="Status", y="Count",
+        title="Event Status Distribution"
+    )
+    fig2.update_traces(line_color="#ffba08", fill="tozeroy", line_shape="spline")
+    fig2.update_layout(
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#c77dff"),
+        title_font=dict(color="#80ffdb")
+    )
+    st.plotly_chart(fig2, use_container_width=True)
 
+# Alerts
 st.subheader("🚨 Alerts")
 if (data["Status"] == "Strong Correlation").any():
     st.error("⚡ Potential Multi-Messenger Detection: Correlated events across sources found!")
