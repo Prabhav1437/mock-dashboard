@@ -42,8 +42,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("🔭 Multi-Messenger Event Correlator")
-st.caption("Prototype dashboard for correlating astrophysical events across multiple observatories 🚀")
+st.title("Multi-Messenger Event Correlator")
+st.caption("Prototype dashboard for correlating astrophysical events across multiple observatories")
 
 st.sidebar.header("Filters")
 source = st.sidebar.multiselect(
@@ -65,16 +65,16 @@ data = pd.DataFrame({
     "Status": np.random.choice(["Isolated", "Possible Correlation", "Strong Correlation"], 12)
 })
 
-st.subheader("📊 Key Metrics")
+st.subheader("Key Metrics")
 col1, col2, col3 = st.columns(3)
 col1.metric("Events Fetched", len(data))
 col2.metric("Correlated Events", (data["Status"] != "Isolated").sum())
 col3.metric("Strong Correlations", (data["Status"] == "Strong Correlation").sum())
 
-st.subheader("📝 Event Data")
+st.subheader("Event Data")
 st.dataframe(data, use_container_width=True)
 
-st.subheader("📈 Event Insights")
+st.subheader("Event Insights")
 col4, col5 = st.columns(2)
 
 with col4:
@@ -112,11 +112,11 @@ with col5:
     st.plotly_chart(fig2, use_container_width=True)
 
 # Alerts
-st.subheader("🚨 Alerts")
+st.subheader("Alerts")
 if (data["Status"] == "Strong Correlation").any():
     st.error("⚡ Potential Multi-Messenger Detection: Correlated events across sources found!")
 else:
-    st.success("✅ No strong correlations detected at the moment.")
+    st.success("No strong correlations detected at the moment.")
 
 st.markdown("---")
-st.caption("⚡ Mock Prototype | Data randomly generated for demo | CTRL+SPACE HACKATHON")
+st.caption("Mock Prototype | Data randomly generated for demo | CTRL+SPACE HACKATHON")
